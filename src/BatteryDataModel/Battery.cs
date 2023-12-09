@@ -69,8 +69,7 @@ namespace BatteryDataModel
             try
             {
 
-                if (!NativeMethods.DeviceIoControl(hBattery, NativeConstants.IOControlCode.BatteryQueryTag, timeOut, Marshal.SizeOf(timeOut), ref queryInfo.BatteryTag, Marshal.SizeOf(queryInfo.BatteryTag), ref outSize, IntPtr.Zero))
-                { throw new Win32Exception(Marshal.GetLastWin32Error()); }
+                queryInfo.BatteryTag = QueryBatteryTag(hBattery);
                 battery.Tag = queryInfo.BatteryTag;
 
                 #region BatteryInformation
@@ -143,7 +142,7 @@ namespace BatteryDataModel
         {
             int outSize = 0;
             var queryInfo = new NativeStructs.BatteryQueryInformation();
-            queryInfo.BatteryTag = Tag;
+
             #region long, BatteryEstimatedTime,BatteryTemperature
 
             ulong lnBuffer = 0;
@@ -161,7 +160,7 @@ namespace BatteryDataModel
 
             try
             {
-
+                queryInfo.BatteryTag = QueryBatteryTag(hBattery);
 
                 queryInfo.InformationLevel = NativeConstants.BatteryQueryInformationLevel.BatteryTemperature;
                 if (NativeMethods.DeviceIoControl(hBattery, NativeConstants.IOControlCode.BatteryQueryInformation, ref queryInfo, Marshal.SizeOf(queryInfo), ref lnBuffer, Marshal.SizeOf(lnBuffer), ref outSize))
@@ -198,7 +197,16 @@ namespace BatteryDataModel
             {
                 hBattery.Close();
             }
-        }
 
+
+        }
+        uint QueryBatteryTag(Microsoft.Win32.SafeHandles.SafeFileHandle hBattery)
+        {
+            int timeOut = 0, outSize = 0;
+            uint tag = 0;
+            if (!NativeMethods.DeviceIoControl(hBattery, NativeConstants.IOControlCode.BatteryQueryTag, timeOut, Marshal.SizeOf(timeOut), ref tag, Marshal.SizeOf(tag), ref outSize, IntPtr.Zero))
+            { throw new Win32Exception(Marshal.GetLastWin32Error()); }
+            return tag;
+        }
     }
 }

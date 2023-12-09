@@ -154,6 +154,7 @@ namespace BatteryDataModel
         {
             //#define IOCTL_Device_Function CTL_CODE(DeviceType, Function, Method, Access)
             // Battery
+            //https://docs.microsoft.com/en-us/windows/win32/power/power-management-control-codes
             BatteryQueryTag = (DeviceType.Battery << 16) | (FileAccess.Read << 14) | (0x10 << 2) | IOMethod.Buffered,
             BatteryQueryInformation = (DeviceType.Battery << 16) | (FileAccess.Read << 14) | (0x11 << 2) | IOMethod.Buffered,
             BatterySetInformation = (DeviceType.Battery << 16) | (FileAccess.Read << 14) | (0x12 << 2) | IOMethod.Buffered,

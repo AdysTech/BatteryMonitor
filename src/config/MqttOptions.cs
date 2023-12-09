@@ -1,11 +1,12 @@
-namespace BatteryMonitor
+namespace BatteryMonitor.config
 {
-    public class MqttConfig
+    public class MqttOptions
     {
+        public const string SectionName = "Mqtt";
         public string Host { get; set; }
         public int Port { get; set; }
         public string Client { get; set; }
         public string CredentialKey { get; set; }
-        public string Topic { get; set; }
+        public string TopicPrefix { get; set; }
     }
 }
